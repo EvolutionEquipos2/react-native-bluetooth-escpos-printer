@@ -57,6 +57,16 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
         constants.put("width80", WIDTH_80);
         return constants;
     }
+    
+    @ReactMethod
+    public void cut() {
+      // Inicializa (opcional):
+      sendDataByte(PrinterCommand.POS_Set_PrtInit());
+      // Línea en blanco para alinear:
+      sendDataByte(new byte[]{0x0A});
+      // Corte parcial (m = 1):
+      sendDataByte(PrinterCommand.POS_Set_Cut(1));
+    }
 
     @ReactMethod
     public void printerInit(final Promise promise){
@@ -346,7 +356,7 @@ public class RNBluetoothEscposPrinterModule extends ReactContextBaseJavaModule
             sendDataByte(Command.LF);
             sendDataByte(data);
             sendDataByte(PrinterCommand.POS_Set_PrtAndFeedPaper(30));
-            sendDataByte(PrinterCommand.POS_Set_Cut(1));
+            // sendDataByte(PrinterCommand.POS_Set_Cut(1));
             sendDataByte(PrinterCommand.POS_Set_PrtInit());
         }
     }
